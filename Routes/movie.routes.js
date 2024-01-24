@@ -7,9 +7,13 @@ const movieRoutes = express.Router();
 
 movieRoutes.use(auth);
 
+// Get all Movies
+
 movieRoutes.get("/", async(req,res)=>{
 
 })
+
+// Add New Movie
 
 movieRoutes.post("/add", async(req,res)=>{
     try{
@@ -21,6 +25,8 @@ movieRoutes.post("/add", async(req,res)=>{
         res.status(500).send({"msg":err})
     }
 })
+
+// Update Movie
 
 movieRoutes.patch("/update/:id", async(req,res)=>{
     const {id}= req.params
@@ -39,6 +45,7 @@ movieRoutes.patch("/update/:id", async(req,res)=>{
     }
 })
 
+// Delete Movie
 
 movieRoutes.delete("/delete/:id", async(req,res)=>{
     const {id}= req.params
