@@ -6,7 +6,10 @@ const movieSchma = mongoose.Schema({
     title:String,
     image:String,
     category:String,
-    rating:Number
+    rating:String,
+    runtime:String,
+    language:String,
+    releaseDate:String
     
 },{versionKey:false});
 

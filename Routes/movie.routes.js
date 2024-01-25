@@ -5,12 +5,17 @@ const { auth } = require("../Middleware/auth.middleware");
 
 const movieRoutes = express.Router();
 
-movieRoutes.use(auth);
+// movieRoutes.use(auth);
 
 // Get all Movies
 
 movieRoutes.get("/", async(req,res)=>{
-
+    try{
+        const movies = await MovieModal.find();
+        res.status(200).send(movies)
+    }catch(err){
+        res.status(500).send({"msg":err})
+    }
 })
 
 // Add New Movie
@@ -31,15 +36,10 @@ movieRoutes.post("/add", async(req,res)=>{
 movieRoutes.patch("/update/:id", async(req,res)=>{
     const {id}= req.params
     try{
-        const movie = await MovieModal.findOne({_id:id});
-        if(req.body.userId == movie.userId)
-        {
-            await MovieModal.findByIdAndUpdate({_id:id},req.body)
-            res.status(200).json({"msg":`This ${id} moive has been updated`,"updated movie":req.body})
-        }else{
-            res.status(200).json({"msg":"You Do not have Authority to update this movie"})
-        }
         
+        await MovieModal.findByIdAndUpdate({_id:id},req.body)
+        res.status(200).json({"msg":`This ${id} moive has been updated`,"updated movie":req.body})
+         
     }catch(err){
         res.status(500).send({"msg":err})
     }
@@ -50,20 +50,11 @@ movieRoutes.patch("/update/:id", async(req,res)=>{
 movieRoutes.delete("/delete/:id", async(req,res)=>{
     const {id}= req.params
     try{
-        const movie = await MovieModal.findOne({_id:id});
-        if(req.body.userId == movie.userId)
-        {
-            await MovieModal.findByIdAndDelete({_id:id})
-            res.status(200).json({"msg":`This ${id} movie has been Deleted uccessfully`})
-        }else{
-            res.status(200).json({"msg":"You Do not have Authority to update this movie"})
-        }
-        
+        await MovieModal.findByIdAndDelete({_id:id})
+        res.status(200).json({"msg":`This ${id} movie has been Deleted uccessfully`})
     }catch(err){
         res.status(500).send({"msg":err})
     }
 })
-
-
 
 module.exports={movieRoutes}
